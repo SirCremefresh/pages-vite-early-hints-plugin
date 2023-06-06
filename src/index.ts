@@ -1,2 +1,2 @@
 export {FileType, FileEnding} from './file.js';
-export {earlyHints} from './plugin.js';
+export {earlyHints, Options} from './plugin.js';
