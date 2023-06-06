@@ -69,6 +69,8 @@ type earlyHints = (
 type Options = {
     hints: { type: FileEnding; name: string; path: string }[];
 };
+
+type FileEnding = "css" | "js";
 ```
 
 ## Run tests
