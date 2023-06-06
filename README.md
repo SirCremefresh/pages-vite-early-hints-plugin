@@ -14,15 +14,62 @@ npm install pages-vite-early-hints-plugin
 
 ## Usage
 
-TODO
+For a vite, react and typescript project you can use the following config:
+In this case it will take the Editor.js chuck and add it as early hint for the path `/edit/*` and the index.css chuck
+for the path `/*`.
+
+```typescript
+import {defineConfig} from "vite";
+import react from "@vitejs/plugin-react-swc";
+import tsconfigPaths from "vite-tsconfig-paths";
+import {earlyHints} from "pages-vite-early-hints-plugin";
+
+export default defineConfig({
+    plugins: [
+        tsconfigPaths(),
+        react(),
+        earlyHints({
+            hints: [
+                {
+                    name: "Editor",
+                    type: "js",
+                    path: "/edit/*",
+                },
+                {
+                    name: "index",
+                    type: "css",
+                    path: "/*",
+                },
+            ]
+        }),
+    ],
+});
+```
+
+The Generated _headers file will be in the dist folder and look like this:
+
+```text
+/edit/*
+  Link: </assets/Editor-6141d1aa.js>; rel=preload; as=script
+/*
+  Link: </assets/index-48eeb833.css>; rel=preload; as=style
+```
 
 ## Features
 
-TODO
+Generate the _headers file with early hints for Cloudflare Pages with the correct hashes on vite build.
 
 ## API
 
-TODO
+```typescript
+type earlyHints = (
+    options: Options
+) => Plugin;
+
+type Options = {
+    hints: { type: FileEnding; name: string; path: string }[];
+};
+```
 
 ## Run tests
 
