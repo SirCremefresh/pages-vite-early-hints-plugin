@@ -1,0 +1,24 @@
+name: Release
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.2.0
+          cache-dependency-path: package-lock.json
+          cache: 'npm'
+      - run: npm ci
+      - run: git config --global user.email "donato@wolfisberg.dev"
+      - run: git config --global user.name "Releaser"
+      - run: npm version patch -m "Bump version to %s"
+      - run: git push && git push --tags
