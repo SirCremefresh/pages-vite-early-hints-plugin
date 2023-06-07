@@ -5,6 +5,7 @@ on:
   push:
     tags:
       - 'v*.*.*'
+      - '!v*.*.*-*'
 
 jobs:
   build:
@@ -19,10 +20,31 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npm run build
-      - run: >+
-          lastTag=$(git tag -l --sort=-version:refname | grep -v -- '-.*' | head -n 1)
-      - run: git tag -l --sort=-version:refname | grep -v -- '-.*' | head -n 2 | tail -n 1
-      - run: git config --global user.email "donato@wolfisberg.dev"
-      - run: git config --global user.name "Releaser"
-      - run: npm version patch -m "Bump version to %s"
-      - run: git push && git push --tags
+      - id: changelog
+        run: >+
+          previousTag=$(git tag -l --sort=-version:refname | grep -v -- '-.*' | head -n 2 | tail -n 1)
+          changelog=$(generate-changelog --file - --allow-unknown --tag $previousTag)
+          echo "changelog=${changelog}" >> $GITHUB_OUTPUT
+      - uses: actions/github-script@v6
+        id: create-release
+        with:
+          script: >+
+            const tag = core.getInput('tag')
+            const name = core.getInput('name')
+            const body = ${{steps.changelog.outputs.changelog}}
+            const draft = false
+            const prerelease = false
+            const response = await github.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: tag,
+              name: name,
+              body: body,
+              draft: draft,
+              prerelease: prerelease
+            })
+          result-encoding: string
+#      - run: git config --global user.email "donato@wolfisberg.dev"
+#      - run: git config --global user.name "Releaser"
+#      - run: npm version prerelease -m "Create prerelease version %s"
+#      - run: git push && git push --tags
