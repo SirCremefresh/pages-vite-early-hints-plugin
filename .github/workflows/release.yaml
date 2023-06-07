@@ -23,7 +23,8 @@ jobs:
       - run: npm ci
       - run: npm run build
       - id: changelog
-        run: >+
+        shell: bash
+        run: |
           previousTag=$(git tag -l --sort=-version:refname | grep -v -- '-.*' | head -n 2 | tail -n 1)
           echo $previousTag
           changelog=$(npm run changelog -- $previousTag)
