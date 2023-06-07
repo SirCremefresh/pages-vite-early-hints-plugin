@@ -1,6 +1,6 @@
 {
   "name": "pages-vite-early-hints-plugin",
-  "version": "0.1.3-2",
+  "version": "0.1.3-3",
   "description": "A vite plugin to generate the _headers file with early hints for Cloudflare Pages",
   "files": [
     "build/**/*"
