@@ -17,4 +17,5 @@ jobs:
       - run: npm ci
       - run: git config --global user.email "donato@wolfisberg.dev"
       - run: git config --global user.name "Releaser"
-      - run: npm version patch
+      - run: npm version patch -m "Bump version to %s"
+      - run: git push && git push --tags
