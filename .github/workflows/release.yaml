@@ -23,6 +23,7 @@ jobs:
       - id: changelog
         run: >+
           previousTag=$(git tag -l --sort=-version:refname | grep -v -- '-.*' | head -n 2 | tail -n 1)
+          echo $previousTag
           changelog=$(npm run changelog -- $previousTag)
           echo "changelog=${changelog}" >> $GITHUB_OUTPUT
       - uses: actions/github-script@v6
