@@ -35,7 +35,7 @@ jobs:
         id: create-release
 
         with:
-          script: >+
+          script: |
             const tag = core.getInput('tag')
             const name = core.getInput('name')
             const body = process.env.CHANGELOG
