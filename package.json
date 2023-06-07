@@ -19,7 +19,8 @@
     "build": "rm -rf build && tsc -p tsconfig.json",
     "test": "node --test build/*.spec.js",
     "buildAndTest": "npm run build && npm run test",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "changelog": "generate-changelog --file - --allow-unknown --tag"
   },
   "keywords": [
     "cloudflare",
