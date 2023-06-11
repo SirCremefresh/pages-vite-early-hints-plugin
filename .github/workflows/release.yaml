@@ -13,6 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
+#         Fetch the whole history with all tags
           fetch-depth: 0
       - name: Use Node.js
         uses: actions/setup-node@v3
@@ -53,7 +54,8 @@ jobs:
               prerelease: prerelease
             })
           result-encoding: string
-#      - run: git config --global user.email "donato@wolfisberg.dev"
-#      - run: git config --global user.name "Releaser"
-#      - run: npm version prerelease -m "Create prerelease version %s"
-#      - run: git push && git push --tags
+      - run: npm publish
+      - run: git config --global user.email "donato@wolfisberg.dev"
+      - run: git config --global user.name "Releaser"
+      - run: npm version prerelease -m "Create prerelease version %s"
+      - run: git push && git push --tags
