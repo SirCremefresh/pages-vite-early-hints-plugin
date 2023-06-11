@@ -54,7 +54,6 @@ jobs:
               prerelease: prerelease
             })
           result-encoding: string
-      - run: npm publish
       - run: git config --global user.email "donato@wolfisberg.dev"
       - run: git config --global user.name "Releaser"
       - run: npm version prerelease -m "Create prerelease version %s"
