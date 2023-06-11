@@ -25,18 +25,20 @@ jobs:
       - id: changelog
         shell: bash
         run: |
+          currentTag=$(git tag -l --sort=-version:refname | grep -v -- '-.*' | head -n 1)
           previousTag=$(git tag -l --sort=-version:refname | grep -v -- '-.*' | head -n 2 | tail -n 1)
           echo $previousTag
           changelog=$(npm run changelog -- $previousTag)
           echo "CHANGELOG<<EOF" >> $GITHUB_ENV
           echo "$changelog" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
+          echo "TAG=$currentTag" >> $GITHUB_ENV
       - uses: actions/github-script@v6
         id: create-release
 
         with:
           script: |
-            const tag = core.getInput('tag')
+            const tag = process.env.TAG
             const name = core.getInput('name')
             const body = process.env.CHANGELOG
             const draft = false
