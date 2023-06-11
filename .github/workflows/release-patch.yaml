@@ -31,6 +31,7 @@ jobs:
           
           npm publish          
 
+          echo $previousTag
           changelog=$(npm run changelog -- $previousTag)
           echo "CHANGELOG<<EOF" >> $GITHUB_ENV
           echo "$changelog" >> $GITHUB_ENV
