@@ -1,7 +1,7 @@
 <!--suppress ALL -->
 <h1 align="center">Welcome to Pages Vite Early Hints Plugin 👋</h1>
 
-[![Test](https://github.com/SirCremefresh/pages-vite-early-hints-plugin/actions/workflows/test.js.yml/badge.svg)](https://github.com/SirCremefresh/pages-vite-early-hints-plugin/actions/workflows/test.js.yml)
+[![Test](https://github.com/SirCremefresh/pages-vite-early-hints-plugin/actions/workflows/test.js.yaml/badge.svg)](https://github.com/SirCremefresh/pages-vite-early-hints-plugin/actions/workflows/test.js.yaml)
 ![npm](https://img.shields.io/npm/v/pages-vite-early-hints-plugin?style=flat-square)
 
 > A vite plugin to generate the _headers file with early hints for Cloudflare Pages
