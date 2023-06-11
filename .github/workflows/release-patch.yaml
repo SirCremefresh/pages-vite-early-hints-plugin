@@ -8,6 +8,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          #         Fetch the whole history with all tags
+          fetch-depth: 0
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
