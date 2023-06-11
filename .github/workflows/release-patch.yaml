@@ -28,10 +28,9 @@ jobs:
           npm version patch -m "Bump version to %s"
           git push && git push --tags
           currentTag=$(git tag -l --sort=-version:refname | grep -v -- '-.*' | head -n 1)
-          
+          echo "Publishing $currentTag"
           npm publish          
-
-          echo $previousTag
+          echo "Creating changelog for $currentTag from $previousTag"
           changelog=$(npm run changelog -- $previousTag)
           echo "CHANGELOG<<EOF" >> $GITHUB_ENV
           echo "$changelog" >> $GITHUB_ENV
