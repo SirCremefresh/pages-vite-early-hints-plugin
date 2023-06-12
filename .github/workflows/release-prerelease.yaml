@@ -28,7 +28,7 @@ jobs:
           npm run build
           
           git push && git push --tags
-          npm publish          
+          npm publish --tag next
           
           npm version prerelease -m "Create prerelease version %s"
           git push && git push --tags
