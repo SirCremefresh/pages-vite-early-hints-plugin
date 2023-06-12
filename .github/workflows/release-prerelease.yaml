@@ -27,7 +27,6 @@ jobs:
           npm ci
           npm run build
           
-          npm version prerelease -m "Bump version to %s"
           git push && git push --tags
           npm publish          
           
