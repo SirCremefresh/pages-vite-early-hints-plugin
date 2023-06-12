@@ -1,0 +1,65 @@
+name: Release Major
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          #         Fetch the whole history with all tags
+          fetch-depth: 0
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+          registry-url: 'https://registry.npmjs.org'
+          cache-dependency-path: package-lock.json
+          cache: 'npm'
+      - env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          git config --global user.name "Releaser"
+          git config --global user.email "donato@wolfisberg.dev"
+          
+          npm ci
+          npm run build
+          
+          previousTag=$(git tag -l --sort=-version:refname | grep -v -- '-.*' | head -n 1)
+          npm version major -m "Bump version to %s"
+          git push && git push --tags
+          currentTag=$(git tag -l --sort=-version:refname | grep -v -- '-.*' | head -n 1)
+          echo "Publishing $currentTag"
+          npm publish          
+          echo "Creating changelog for $currentTag from $previousTag"
+          changelog=$(npm run changelog -- $previousTag)
+          echo "CHANGELOG<<EOF" >> $GITHUB_ENV
+          echo "$changelog" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "TAG=$currentTag" >> $GITHUB_ENV
+
+      - uses: actions/github-script@v6
+        id: create-release
+        with:
+          script: |
+            const tag = process.env.TAG
+            const name = core.getInput('name')
+            const body = process.env.CHANGELOG
+            const draft = false
+            const prerelease = false
+            const response = await github.rest.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: tag,
+              name: name,
+              body: body,
+              draft: draft,
+              prerelease: prerelease
+            })
+          result-encoding: string
+
+      - run: |
+          npm version prerelease -m "Create prerelease version %s"
+          git push && git push --tags
